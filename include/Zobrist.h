@@ -5,10 +5,10 @@
 #include "MyTypes.h"
 
 // Globals
-extern U64 pieceKeys[13][120]; // [PieceType][Square]
+extern U64 pieceKeys[13][64]; // [PieceType][Square]
 extern U64 sideKey;           // Random num to XOR when it's Black's turn
 extern U64 castleKeys[16];    // Random num for castling rights 
-extern U64 enPassantKeys[120];
+extern U64 enPassantKeys[65];
 extern U64 positionKey;
 
 // current board's unique ID

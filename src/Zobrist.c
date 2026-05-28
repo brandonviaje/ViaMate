@@ -39,7 +39,7 @@ void InitZobrist()
     }
     
     // en Passant keys  init all of them
-    for(int i = 0; i < 120; i++) 
+    for(int i = 0; i < 64; i++) 
     {
         enPassantKeys[i] = XorShift64(&seed);
     }
