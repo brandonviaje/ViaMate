@@ -1,45 +1,50 @@
 #include "../include/Zobrist.h"
 
-U64 pieceKeys[13][120];
+U64 pieceKeys[13][64];
 U64 sideKey;
 U64 castleKeys[16];
-U64 enPassantKeys[120]; 
+U64 enPassantKeys[65]; 
 U64 positionKey;
 
-U64 Rand64() 
+U64 XorShift64(U64 *state) 
 {
-    U64 r1 = (U64)(rand()) & 0xFFFF;
-    U64 r2 = (U64)(rand()) & 0xFFFF;
-    U64 r3 = (U64)(rand()) & 0xFFFF;
-    U64 r4 = (U64)(rand()) & 0xFFFF;
-    return r1 | (r2 << 16) | (r3 << 32) | (r4 << 48);
+    U64 x = *state;
+    x ^= x << 13;
+    x ^= x >> 7;
+    x ^= x << 17;
+    *state = x;
+    return x;
 }
 
 void InitZobrist() 
 {
+    U64 seed = 0x9E3779B97F4A7C15ULL;
+
     // fill piece keys
     for(int piece = 0; piece < 13; piece++) 
     {
-        for(int sq = 0; sq < 120; sq++) 
+        for(int sq = 0; sq < 64; sq++) 
         {
-            pieceKeys[piece][sq] = Rand64();
+            pieceKeys[piece][sq] = XorShift64(&seed);
         }
     }
 
     // side key
-    sideKey = Rand64();
+    sideKey = XorShift64(&seed);
 
     // castle keys
     for(int i = 0; i < 16; i++) 
     {
-        castleKeys[i] = Rand64();
+        castleKeys[i] = XorShift64(&seed);
     }
     
     // en Passant keys  init all of them
     for(int i = 0; i < 120; i++) 
     {
-        enPassantKeys[i] = Rand64();
+        enPassantKeys[i] = XorShift64(&seed);
     }
+
+    enPassantKeys[64] = 0ULL;
 }
 
 // Compute key from scratch 
@@ -52,12 +57,11 @@ U64 GeneratePosKey()
     {
         U64 bb = bitboards[piece];
         // scan the bitboard for pieces
-        for (int sq = 0; sq < 64; sq++) 
+        while (bb) 
         {
-            if (GetBit(bb, sq)) 
-            {
-                finalKey ^= pieceKeys[piece][sq];
-            }
+            int sq = __builtin_ctzll(bb); 
+            finalKey ^= pieceKeys[piece][sq];
+            bb &= bb - 1; 
         }
     }
 
@@ -71,10 +75,8 @@ U64 GeneratePosKey()
     finalKey ^= castleKeys[castle];
 
     // hash En Passant
-    if (enpassant != -1) 
-    {
-        finalKey ^= enPassantKeys[enpassant];
-    }
+    int epIndex = (enpassant == -1) ? 64 : enpassant;
+    finalKey ^= enPassantKeys[epIndex];
 
     return finalKey;
 }
@@ -98,8 +100,6 @@ void HashSide()
 
 void HashEnPassant() 
 {
-    if (enpassant != -1) 
-    {
-        positionKey ^= enPassantKeys[enpassant];
-    }
+    int index = (enpassant == -1) ? 64 : enpassant; 
+    positionKey ^= enPassantKeys[index];
 }
