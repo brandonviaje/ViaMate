@@ -34,21 +34,14 @@ void InitTT(int mbSize)
 
 void ClearTT()
 {
-    for (int i = 0; i < TTable.numEntries; i++)
-    {
-        TTable.entries[i].hashKey = 0;
-        TTable.entries[i].score = 0;
-        TTable.entries[i].move = 0;
-        TTable.entries[i].depth = 0;    
-        TTable.entries[i].flags = 0;
-    }
+    memset(TTable.entries, 0, TTable.numEntries * sizeof(TTEntry));
 }
 
 // read tt
 int ReadTT(U64 positionKey, int *move, int *score, int alpha, int beta, int depth)
 {
     // map key to index
-    int index = positionKey & (U64)TTable.numEntries;
+    int index = positionKey & (TTable.numEntries - 1);
 
     // collision check
     if (TTable.entries[index].hashKey == positionKey)
@@ -81,7 +74,7 @@ int ReadTT(U64 positionKey, int *move, int *score, int alpha, int beta, int dept
 // store entry
 void WriteTT(U64 positionKey, int move, int score, int depth, int flag)
 {
-    U64 index = positionKey & (U64)TTable.numEntries;
+    int index = positionKey & (TTable.numEntries - 1);
 
     if (TTable.entries[index].hashKey == positionKey && TTable.entries[index].depth > depth)
     {

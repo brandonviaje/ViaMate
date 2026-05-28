@@ -10,10 +10,10 @@
 typedef struct
 {
     U64 hashKey; //  zobrist Key
-    int score;   //  evaluation score
-    int move;    //  best move found
-    int depth;
-    int flags;   // EXACT, ALPHA, or BETA
+    int16_t score;   //  evaluation score
+    uint16_t move;    //  best move found
+    int8_t depth;
+    uint8_t flags;   // EXACT, ALPHA, or BETA
 } TTEntry;
 
 typedef struct
