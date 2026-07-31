@@ -9,6 +9,7 @@
 #include <sys/time.h>
 #include "Transposition.h"
 #include "Utils.h"
+#include <math.h> 
 
 #define INF 50000
 #define MATE 49000
@@ -30,5 +31,6 @@ int AlphaBeta(int alpha, int beta, int depth, int ply);
 void SearchPosition(int maxDepth, int timeAllocatedMs);
 int Quiescence(int alpha, int beta, int ply);
 char GetPromotionChar(int promotedPiece);
+void RunBenchmark();
 
 #endif

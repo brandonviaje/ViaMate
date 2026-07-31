@@ -34,7 +34,7 @@ TARGET = viaje_engine
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) -lm
 
 # Compile *.c → build/*.o
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)

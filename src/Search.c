@@ -308,3 +308,29 @@ int Quiescence(int alpha, int beta, int ply)
     }
     return alpha;
 }
+
+
+
+void RunBenchmark()
+{
+    printf("--- Starting Search Optimization Benchmark ---\n");
+    
+    // kiwipete position
+    char fen[] = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+    
+    ParseFEN(fen); 
+
+    int testDepth = 7;
+    printf("Searching Kiwipete to Depth %d...\n", testDepth);
+    
+    // run search with a massive time limit so it goes to depth 7
+    SearchPosition(testDepth, 9999999); 
+
+    // calculate effective branching factor (Nodes ^ (1 / Depth))
+    double ebf = pow((double)info.nodes, 1.0 / testDepth);
+
+    printf("\n--- Benchmark Results ---\n");
+    printf("Total Nodes Searched: %ld\n", info.nodes);
+    printf("Effective Branching Factor: %.2f\n", ebf);
+    printf("-------------------------\n");
+}

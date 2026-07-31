@@ -2,8 +2,16 @@
 
 U64 Perft(int depth)
 {
+    // bulk count at depth 1, just need to know how many legal moves exist from this position
+    if (depth == 1) 
+    {
+        MoveList list;
+        GenerateLegalMoves(&list);
+        return list.count;
+    }
+
     // base case
-    if (depth == 0)
+    if (depth <= 0)
         return 1;
 
     MoveList list;

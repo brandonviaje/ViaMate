@@ -220,6 +220,10 @@ void UciLoop()
         {
             break;
         }
+        else if (strncmp(line, "bench", 5) == 0)
+        {
+            RunBenchmark();
+        }
         else if (strncmp(line, "uci", 3) == 0)
         {
             printf("id name Viaje 1.0\n");
