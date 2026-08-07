@@ -18,7 +18,6 @@ It serves both as a learning exercise in low-level systems programming and as a 
   - Promotions
   - Check and pin validation
 - **Alpha–beta search with iterative deepening**
-- **NNUE-based evaluation** with dynamic weighting across game phases
 - **Search optimizations** including move ordering, quiescence search, and transposition tables
 - **Deployed as a Lichess bot**, handling asynchronous I/O, time controls, and live game states
 
